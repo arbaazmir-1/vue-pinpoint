@@ -1,6 +1,6 @@
 <script setup>
 import login from '../assets/login.svg?url'
-import catLottie from '../assets/catLottie.json'
+import catLottie from '../assets/catLottieB.json'
 import curveLine from '../assets/curveLine.svg?url'
 import { LottieAnimation } from 'lottie-web-vue'
 import { Button } from '@/components/ui/button'
@@ -8,6 +8,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RouterLink } from 'vue-router'
 import ModeToggle from '@/components/ModeToggle.vue'
+import { ref } from 'vue'
+let anim = ref()
 let email
 let password
 const logMessage = () => {
@@ -19,7 +21,7 @@ const logMessage = () => {
 <template lang="pug">
 div(class="w-screen h-screen flex md:flex-row flex-col-reverse justify-between")
     div(class="w-1/2 h-full hidden md:flex items-center justify-center p-10")
-        div(class="flex flex-col items-center justify-center w-11/12 mx-auto rounded-md h-full bg-gradient-to-br to-100%  from-[#e99898] via-[#dc45ff80] to-white")
+        div(class="flex flex-col items-center justify-center w-11/12 mx-auto rounded-md h-full bg-gradient-to-br to-100%  from-[#e99898] via-[#dc45ff80] dark:to-black to-white")
             h2(class="w-6/12 text-3xl text-start mx-auto text-white my-5") Store All Your Links 
                 br
                 | In One Place
@@ -29,6 +31,7 @@ div(class="w-screen h-screen flex md:flex-row flex-col-reverse justify-between")
                 | Share With Ease
                 br
                 | Get Analytics Of Each Clicks
+            
 
     div(class="md:w-1/2 h-full form-container flex items-center justify-center")
         div(class="w-11/12 md:w-3/4 lg:w-1/2 h-fit md:h-1/2 mx-auto  flex flex-col items-center p-5")
@@ -40,13 +43,14 @@ div(class="w-screen h-screen flex md:flex-row flex-col-reverse justify-between")
             p(class="text-center") Seamless Sharing of Your Crafted 
                 br 
                 |Links Across Platforms!
-            div(class="form w-full flex-col flex h-fit my-5 p-10 space-y-5 dark:bg-gray-800 bg-[#f9f9f9] shadow-lg rounded-md")
+            div(class="form w-full flex-col flex h-fit my-5 p-10  space-y-5 dark:bg-gray-800 bg-[#f9f9f9] shadow-lg rounded-md")
                 div
                     Label Enter Your Email
                     Input(placeholder="Enter Email" v-model="email" type="email")
                 div
                     Label Enter Your Password
-                Input(placeholder="Enter Password" type="password" v-model="password")
+                    Input(placeholder="Enter Password" type="password" v-model="password")
+                //- lottie-animation(:animation-data="catLottie" :auto-play="true" :speed="1" ref="anim" class="h-10")
                 Button(@click="logMessage") Login
                 div( class="w-full flex flex-col items-end text-xs") 
                     p Don't have an account?
