@@ -19,7 +19,7 @@ const logMessage = () => {
 </script>
 
 <template lang="pug">
-div(class="w-screen h-screen flex md:flex-row flex-col-reverse justify-between")
+div(class="animate-fade-in w-screen h-screen flex md:flex-row flex-col-reverse justify-between")
     div(class="w-1/2 h-full hidden md:flex items-center justify-center p-10")
         div(class="flex flex-col items-center justify-center w-11/12 mx-auto rounded-md h-full bg-gradient-to-br to-100%  from-[#e99898] via-[#dc45ff80] dark:to-black to-white")
             h2(class="w-6/12 text-3xl text-start mx-auto text-white my-5") Store All Your Links 
@@ -80,7 +80,7 @@ div(class="w-screen h-screen flex md:flex-row flex-col-reverse justify-between")
     font-weight: 400
     font-style: normal
 .abeezee-regular
-  font-family: "ABeeZee", sans-serif
-  font-weight: 400
-  font-style: normal
+    font-family: "ABeeZee", sans-serif
+    font-weight: 400
+    font-style: normal
 </style>
