@@ -82,7 +82,7 @@
     opacity: 0;
   }
   50% {
-    opacity: 0.75;
+    opacity: 0.5;
   }
   100% {
     opacity: 1;
@@ -90,7 +90,7 @@
 }
 
 .animate-fade-in {
-  animation: page-fade 2s normal;
+  animation: page-fade 0.5s normal ease-in-out;
 }
 .homemade-apple-regular {
   font-family: 'Homemade Apple', cursive;
