@@ -1,5 +1,5 @@
 <template lang="pug">
-div(class="w-full mx-auto  flex flex-col h-full animate-fade-in " )
+div(class="w-full mx-auto overflow-y-scroll   flex flex-col h-full animate-fade-in " )
     div(v-for="(section,sectionName) in store.getLinks" class="w-full p-4 flex flex-col space-y-4" :key="section.id") 
         div(class="w-full flex items-center justify-between") 
             h2(@click="toggleDialog(section)" class="text-2xl flex items-center" ) {{section.name}} 

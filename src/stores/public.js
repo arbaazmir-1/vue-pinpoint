@@ -1,9 +1,8 @@
-import { ref, computed, reactive } from 'vue'
 import { defineStore } from 'pinia'
 
-export const useLinksStore = defineStore('links', {
+export const usePublicStore = defineStore('public', {
   state: () => ({
-    links: reactive({
+    links: {
       uid1: {
         id: 'uid1',
         createdAt: new Date(),
@@ -54,57 +53,19 @@ export const useLinksStore = defineStore('links', {
           { id: 'linkuid18', name: 'Ars Technica', link: 'https://arstechnica.com', clicks: 280 }
         ]
       }
-    })
+    },
+    user: {
+      name: 'Alex',
+      profilePic: 'https://github.com/radix-vue.png',
+      bio: 'Software Engineer'
+    }
   }),
   getters: {
     getLinks(state) {
       return state.links
-    }
-  },
-  actions: {
-    addNewSection(newSection) {
-      const id = 'uid' + Math.floor(Math.random() * 1000)
-      this.links[id] = {
-        id: id,
-        name: newSection.name.value,
-        createdAt: new Date(),
-        published: newSection.publish.value,
-        links: []
-      }
     },
-    editSection(newData) {
-      const section = this.links[newData.id]
-      if (section) {
-        section.name = newData.name
-        section.published = newData.published
-      }
-    },
-    deleteSection(id) {
-      delete this.links[id]
-    },
-    deleteLink(linkID, sectionID) {
-      const section = this.links[sectionID]
-      if (section) {
-        let index = section.links.findIndex((item) => item.id === linkID)
-        if (index !== -1) {
-          section.links.splice(index, 1)
-        }
-      }
-    },
-    updateLink(linkData, sectionID) {
-      const section = this.links[sectionID]
-      if (section) {
-        let index = section.links.findIndex((item) => item.id === linkData.id)
-        if (index !== -1) {
-          section.links[index] = linkData
-        }
-      }
-    },
-    addLink(sectionID, data) {
-      const section = this.links[sectionID]
-      if (section) {
-        section.links.push(data)
-      }
+    getUser(state) {
+      return state.user
     }
   }
 })

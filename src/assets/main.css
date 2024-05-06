@@ -91,7 +91,13 @@
 
 .animate-fade-in {
   animation: page-fade 0.5s normal ease-in-out;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
 }
+.animate-fade-in::-webkit-scrollbar {
+  display: none;
+}
+
 .homemade-apple-regular {
   font-family: 'Homemade Apple', cursive;
   font-weight: 400;
