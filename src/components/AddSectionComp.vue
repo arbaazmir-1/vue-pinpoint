@@ -29,7 +29,6 @@ const name = ref('')
 const publish = ref(false)
 const store = useLinksStore()
 const save = () => {
-  console.log(name, publish)
   store.addNewSection({ name, publish })
   emit('closeDialog')
 }

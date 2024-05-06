@@ -20,7 +20,7 @@ const emit = defineEmits(['closeDialog', 'deleteSection'])
 const store = useLinksStore()
 
 const deleteSection = () => {
-  store.deleteSection(props.data.id)
+  store.deleteSection(props.data._id)
   emit('closeDialog')
 }
 </script>

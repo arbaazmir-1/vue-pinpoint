@@ -36,7 +36,9 @@ let urlPattern = /\b(?:https?|ftp):\/\/[-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[-A-Za-z0-9
 const linkError = ref(null)
 const addLink = (sectionid, name, link) => {
   if (!name || !link || !sectionid) {
+    console.log(name, link, sectionid)
     let instance = $toast.error('Please Fill all the value')
+    return
   }
   if (!urlPattern.test(link)) {
     linkError.value = 'Invalid URL'

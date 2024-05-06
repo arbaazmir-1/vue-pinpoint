@@ -9,7 +9,7 @@ div(class="animate-fade-in overflow-y-scroll h-fit md:h-screen md:w-3/5 w-11/12 
                 h2 {{user.name}}
                 p(class="text-sm") {{ user.bio }}
         mode-toggle            
-    div(v-for="(section,sectionName) in store.getLinks" class="w-full  p-4 flex flex-col space-y-4" :key="section.id") 
+    div(v-for="(section,sectionName) in store.getSections" class="w-full  p-4 flex flex-col space-y-4" :key="section._id") 
         div(class="w-full flex items-center justify-between") 
             h2( class="text-2xl flex items-center" ) {{section.name}} 
                 
@@ -21,7 +21,7 @@ div(class="animate-fade-in overflow-y-scroll h-fit md:h-screen md:w-3/5 w-11/12 
             p(class="text-xs") URL: {{link.link}}
            
         
-    div(v-if='Object.keys(store.getLinks).length ===0' class="w-full flex items-center justify-center")
+    div(v-if='Object.keys(store.getSections).length ===0' class="w-full flex items-center justify-center")
         p(class="text-sm text-blue-400") This user has no link
 
 

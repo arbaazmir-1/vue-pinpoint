@@ -37,7 +37,7 @@ let urlPattern = /\b(?:https?|ftp):\/\/[-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[-A-Za-z0-9
 const errorInput = ref(null)
 const deleteLink = (localData, sectionIDLocal) => {
   if (!localData || !sectionIDLocal) return
-  store.deleteLink(localData.id, sectionIDLocal)
+  store.deleteLink(localData._id, sectionIDLocal)
   emit('closeDialog')
 }
 const updateLink = (localData, sectionIDLocal) => {
@@ -49,6 +49,7 @@ const updateLink = (localData, sectionIDLocal) => {
     errorInput.value = 'Invalid URL'
     return
   }
+  console.log(sectionIDLocal)
   store.updateLink(localData, sectionIDLocal)
   emit('closeDialog')
 }
