@@ -6,19 +6,40 @@ import { LottieAnimation } from 'lottie-web-vue'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import ModeToggle from '@/components/ModeToggle.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+const router = useRouter()
 let anim = ref()
 const email = ref('')
+const name = ref('')
 const password = ref('')
 const username = ref('')
 const repassword = ref('')
-const logMessage = () => {}
+const formData = computed(() => ({
+  email: email.value,
+  name: name.value,
+  password: password.value,
+  username: username.value,
+  repassword: repassword.value
+}))
+const store = useAuthStore()
+const register = async () => {
+  const { email, name, password, username, repassword } = formData.value
+
+  if (!email || !name || !password || !username || !repassword) return
+  if (password.length < 8) return
+  if (password !== repassword) return
+  const res = await store.registerUser({ email, name, password, username })
+  if ((res.data.message = 'code-Sent')) {
+    router.push({ name: 'verify-code', params: { email: res.data.email } })
+  }
+}
 </script>
 
 <template lang="pug">
-div(class="animate-fade-in w-screen h-screen flex md:flex-row flex-col-reverse justify-between")
+div(class="animate-fade-in w-screen h-hit md:h-screen flex md:flex-row flex-col-reverse justify-between")
     div(class="w-1/2 h-full hidden md:flex items-center justify-center p-10")
         div(class="flex flex-col items-center justify-center w-11/12 mx-auto rounded-md h-full bg-gradient-to-br to-100%  from-[#e99898] via-[#dc45ff80] dark:to-black to-white")
             h2(class="w-6/12 text-3xl text-start mx-auto text-white my-5") Store All Your Links 
@@ -32,8 +53,8 @@ div(class="animate-fade-in w-screen h-screen flex md:flex-row flex-col-reverse j
                 | Get Analytics Of Each Clicks
             
 
-    div(class="md:w-1/2 h-full form-container flex items-center justify-center")
-        div(class="w-11/12 md:w-3/4 lg:w-1/2 h-fit md:h-1/2 mx-auto  flex flex-col items-center p-5")
+    div(class="md:w-1/2 h-full form-container  flex items-center justify-center")
+        div(class="w-11/12 md:w-3/4 lg:w-1/2 h-fit md:h-3/4  mx-auto   flex flex-col items-center p-5")
             h2(class="text-5xl abeezee-regular flex ") 📌 
                 span(class="homemade-apple-regular") P
                 |inpoint
@@ -49,6 +70,9 @@ div(class="animate-fade-in w-screen h-screen flex md:flex-row flex-col-reverse j
                     Label Enter Your Email
                     Input(placeholder="Enter Email" v-model="email" type="email")
                 div
+                    Label Enter Your Name
+                    Input(placeholder="Enter Name" v-model="name" type="text")
+                div
                     Label Enter Your Desired Username
                     Input(placeholder="Enter Username" v-model="username" type="text")
                 div
@@ -58,7 +82,7 @@ div(class="animate-fade-in w-screen h-screen flex md:flex-row flex-col-reverse j
                     Label Reenter Your Password
                     Input(placeholder="Enter Password" type="password" v-model="repassword")
                 //- lottie-animation(:animation-data="catLottie" :auto-play="true" :speed="1" ref="anim" class="h-10")
-                Button(@click="logMessage") Login
+                Button(@click="register") Register
                 div( class="w-full flex flex-col items-end text-xs") 
                     p Have an account?
                     router-link(to="/auth/login" class="hover:text-blue-400 transition-colors duration-150 ease-in-out") Login to Account

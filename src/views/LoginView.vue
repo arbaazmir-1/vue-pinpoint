@@ -10,12 +10,9 @@ import { RouterLink } from 'vue-router'
 import ModeToggle from '@/components/ModeToggle.vue'
 import { ref } from 'vue'
 let anim = ref()
-let email
-let password
-const logMessage = () => {
-  console.log(email)
-  console.log(password)
-}
+const email = ref('')
+const password = ref('')
+const logMessage = () => {}
 </script>
 
 <template lang="pug">
@@ -53,7 +50,7 @@ div(class="animate-fade-in w-screen h-screen flex md:flex-row flex-col-reverse j
                     Label Enter Your Password
                     Input(placeholder="Enter Password" type="password" v-model="password")
                 //- lottie-animation(:animation-data="catLottie" :auto-play="true" :speed="1" ref="anim" class="h-10")
-                Button(@click="logMessage") Login
+                Button() Login
                 div( class="w-full flex flex-col items-end text-xs") 
                     p Don't have an account?
                     router-link(to="/auth/register" class="hover:text-blue-400 transition-colors duration-150 ease-in-out") Create Account

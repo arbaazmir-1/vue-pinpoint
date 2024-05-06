@@ -5,6 +5,8 @@ import NotFound from '@/views/NotFound.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import VerifyEmail from '@/views/VerifyEmail.vue'
 import PublicLinksView from '@/views/PublicLinksView.vue'
+import { useAuthStore } from '@/stores/auth'
+import axios from 'axios'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -30,17 +32,43 @@ const router = createRouter({
       component: RegisterView
     },
     {
-      path: '/auth/verify-code',
+      path: '/auth/verify-code/:email',
       name: 'verify-code',
       component: VerifyEmail,
-      meta: { requiresAuth: true }
+      meta: { checkEmail: true }
     },
     { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
   ]
 })
 
 router.beforeEach((to, from) => {
-  console.log(to.meta)
+  const store = useAuthStore()
+  const user = store.getProfile
+  if (to.meta.checkEmail) {
+    if (!to.params.email) {
+      router.push({ name: 'register' })
+    }
+    const email = to.params.email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      router.push({ name: 'register' })
+    }
+    const apiUrl = import.meta.env.VITE_API_URL
+    const handleComplete = async () => {
+      try {
+        const res = await axios.post(`${apiUrl}/auth/verify`, {
+          email: to.params.email
+        })
+
+        if ((res.data.message = 'email-verified')) {
+          router.push({ name: 'login' })
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    handleComplete()
+  }
 })
 
 export default router

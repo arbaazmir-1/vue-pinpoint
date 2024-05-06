@@ -6,14 +6,41 @@ import { LottieAnimation } from 'lottie-web-vue'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import ModeToggle from '@/components/ModeToggle.vue'
 import { PinInput, PinInputGroup, PinInputInput } from '@/components/ui/pin-input'
+import { useToast } from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-sugar.css'
+import axios from 'axios'
 import { ref } from 'vue'
+const $toast = useToast()
 let anim = ref()
 const code = ref([])
-const handleComplete = () => {
-  console.log(code.value)
+const router = useRouter()
+const route = useRoute()
+const apiUrl = import.meta.env.VITE_API_URL
+const loading = ref(false)
+const handleComplete = async () => {
+  const codeString = code.value.join('')
+  try {
+    loading.value = true
+    const res = await axios.post(`${apiUrl}/auth/verify`, {
+      code: codeString,
+      email: route.params.email
+    })
+    loading.value = false
+    console.log(res)
+    if ((res.data.message = 'email-verified')) {
+      let instance = $toast.success('Horray!! Email Verified! Login Now!')
+      router.push({ name: 'login' })
+    }
+  } catch (e) {
+    loading.value = false
+    if ((e.response.data.message = 'code-wrong')) {
+      let instance = $toast.error('Wrong Code Try Again')
+    }
+    console.log(e)
+  }
 }
 </script>
 
@@ -57,7 +84,9 @@ div(class="animate-fade-in w-screen h-screen flex md:flex-row flex-col-reverse j
                
         
                 //- lottie-animation(:animation-data="catLottie" :auto-play="true" :speed="1" ref="anim" class="h-10")
-                Button Verify
+                Button(@click="handleComplete" :disabled='loading') 
+                    span(v-if='!loading') Verify
+                    span(v-if='loading') Loading
                 div( class="w-full text-center text-xs") 
                     p Check your email for code
                     
