@@ -11,16 +11,14 @@ export const useLinksStore = defineStore('links', {
         published: true,
         links: [
           {
+            id: 'linkuid1',
             name: 'Facebook',
             link: 'https://facebook.com',
             clicks: 212
           },
+          { id: 'linkuid2', name: 'Twitter', link: 'https://twitter.com', clicks: 150 },
           {
-            name: 'Twitter',
-            link: 'https://twitter.com',
-            clicks: 150
-          },
-          {
+            id: 'linkuid3',
             name: 'Instagram',
             link: 'https://instagram.com',
             clicks: 180
@@ -34,11 +32,13 @@ export const useLinksStore = defineStore('links', {
         published: false,
         links: [
           {
+            id: 'linkuid4',
             name: 'CNN',
             link: 'https://cnn.com',
             clicks: 300
           },
           {
+            id: 'linkuid5',
             name: 'BBC',
             link: 'https://bbc.com',
             clicks: 250
@@ -59,7 +59,8 @@ export const useLinksStore = defineStore('links', {
         id: id,
         name: newSection.name.value,
         createdAt: new Date(),
-        published: newSection.publish.value
+        published: newSection.publish.value,
+        links: []
       }
     },
     editSection(newData) {
@@ -71,6 +72,30 @@ export const useLinksStore = defineStore('links', {
     },
     deleteSection(id) {
       delete this.links[id]
+    },
+    deleteLink(linkID, sectionID) {
+      const section = this.links[sectionID]
+      if (section) {
+        let index = section.links.findIndex((item) => item.id === linkID)
+        if (index !== -1) {
+          section.links.splice(index, 1)
+        }
+      }
+    },
+    updateLink(linkData, sectionID) {
+      const section = this.links[sectionID]
+      if (section) {
+        let index = section.links.findIndex((item) => item.id === linkData.id)
+        if (index !== -1) {
+          section.links[index] = linkData
+        }
+      }
+    },
+    addLink(sectionID, data) {
+      const section = this.links[sectionID]
+      if (section) {
+        section.links.push(data)
+      }
     }
   }
 })

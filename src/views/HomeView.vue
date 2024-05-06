@@ -5,6 +5,7 @@ div(class="animate-fade-in h-screen md:w-3/5 w-11/12 lg:w-2/5 flex flex-col mx-a
         div(class="tab-link flex flex-col space-y-2 cursor-pointer select-none" @click="changeTabs(link)" :class="[currentTab === link && 'active-link']"  v-for="(link,index) in tabs") {{link}}
             hr
     link-container-comp(v-if="currentTab==='Home'" )
+    profile-container-comp(v-if="currentTab==='Profile'")
         
 
  
@@ -13,14 +14,13 @@ div(class="animate-fade-in h-screen md:w-3/5 w-11/12 lg:w-2/5 flex flex-col mx-a
 <script setup>
 import NavbarComp from '@/components/NavbarComp.vue'
 import LinkContainerComp from '@/components/LinkContainerComp.vue'
+import ProfileContainerComp from '@/components/ProfileContainerComp.vue'
 import { ref } from 'vue'
 let tabs = ['Home', 'Profile']
 let currentTab = ref(tabs[0])
 
 const changeTabs = (link) => {
-  console.log('clicked')
   currentTab.value = link
-  console.log(currentTab.value)
 }
 </script>
 

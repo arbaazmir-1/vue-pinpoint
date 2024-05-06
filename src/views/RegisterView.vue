@@ -10,12 +10,11 @@ import { RouterLink } from 'vue-router'
 import ModeToggle from '@/components/ModeToggle.vue'
 import { ref } from 'vue'
 let anim = ref()
-let email
-let password
-const logMessage = () => {
-  console.log(email)
-  console.log(password)
-}
+const email = ref('')
+const password = ref('')
+const username = ref('')
+const repassword = ref('')
+const logMessage = () => {}
 </script>
 
 <template lang="pug">
@@ -44,19 +43,25 @@ div(class="animate-fade-in w-screen h-screen flex md:flex-row flex-col-reverse j
                 br 
                 |Links Across Platforms!
             div(class="form w-full flex-col flex h-fit my-5 p-10  space-y-5 dark:bg-gray-800 bg-[#f9f9f9] shadow-lg rounded-md")
-                div 
-                    h5 Login
+                div
+                    h5 Register
                 div
                     Label Enter Your Email
                     Input(placeholder="Enter Email" v-model="email" type="email")
                 div
+                    Label Enter Your Desired Username
+                    Input(placeholder="Enter Username" v-model="username" type="text")
+                div
                     Label Enter Your Password
                     Input(placeholder="Enter Password" type="password" v-model="password")
+                div
+                    Label Reenter Your Password
+                    Input(placeholder="Enter Password" type="password" v-model="repassword")
                 //- lottie-animation(:animation-data="catLottie" :auto-play="true" :speed="1" ref="anim" class="h-10")
                 Button(@click="logMessage") Login
                 div( class="w-full flex flex-col items-end text-xs") 
-                    p Don't have an account?
-                    router-link(to="/auth/register" class="hover:text-blue-400 transition-colors duration-150 ease-in-out") Create Account
+                    p Have an account?
+                    router-link(to="/auth/login" class="hover:text-blue-400 transition-colors duration-150 ease-in-out") Login to Account
     div(class="bottom-10 absolute right-10 z-10")
         mode-toggle
                     
