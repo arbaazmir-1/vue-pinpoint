@@ -10,7 +10,7 @@ import { RouterLink, useRoute, useRouter } from 'vue-router'
 import ModeToggle from '@/components/ModeToggle.vue'
 import { PinInput, PinInputGroup, PinInputInput } from '@/components/ui/pin-input'
 import { useToast } from 'vue-toast-notification'
-import 'vue-toast-notification/dist/theme-sugar.css'
+import 'vue-toast-notification/dist/theme-default.css'
 import axios from 'axios'
 import { ref } from 'vue'
 const $toast = useToast()
@@ -32,7 +32,7 @@ const handleComplete = async () => {
     console.log(res)
     if ((res.data.message = 'email-verified')) {
       let instance = $toast.success('Horray!! Email Verified! Login Now!')
-      router.push({ name: 'login' })
+      router.push({ name: 'login', replace: true })
     }
   } catch (e) {
     loading.value = false

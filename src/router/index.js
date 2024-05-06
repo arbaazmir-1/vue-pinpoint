@@ -62,7 +62,7 @@ router.beforeEach((to, from) => {
         })
 
         if ((res.data.message = 'email-verified')) {
-          router.push({ name: 'login' })
+          router.push({ name: 'login', replace: true })
         }
       } catch (e) {
         console.log(e)
@@ -92,7 +92,7 @@ router.beforeEach((to, from) => {
             })
 
             if (res.data.message === 'auth-success') {
-              router.push({ name: 'home' })
+              router.push({ name: 'home', replace: true })
               store.setUser(res.data.user)
             }
           } catch (e) {
@@ -125,7 +125,7 @@ router.beforeEach((to, from) => {
             })
 
             if (res.data.message === 'auth-success') {
-              router.push({ name: 'home' })
+              router.push({ name: 'home', replace: true })
               store.setUser(res.data.user)
             }
           } catch (e) {
@@ -135,7 +135,7 @@ router.beforeEach((to, from) => {
 
         handleGetUser()
       } else {
-        router.push({ name: 'login' })
+        router.push({ name: 'login', replace: true })
       }
     }
   }

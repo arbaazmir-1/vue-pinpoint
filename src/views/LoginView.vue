@@ -12,7 +12,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from 'vue-toast-notification'
-import 'vue-toast-notification/dist/theme-sugar.css'
+import 'vue-toast-notification/dist/theme-default.css'
 const $toast = useToast()
 let anim = ref()
 const email = ref('')
@@ -38,7 +38,7 @@ const loginFunc = async () => {
 
   const res = await store.login({ email, password })
   if (res.data && res.data.message === 'auth-success') {
-    router.push({ name: 'home' })
+    router.push({ name: 'home', replace: true })
   }
   if (res.response && res.response.status === 400) {
     if (res.response.data.message === 'not-verified') {

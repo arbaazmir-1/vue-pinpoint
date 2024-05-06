@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 import { RouterLink, useRouter } from 'vue-router'
 import ModeToggle from '@/components/ModeToggle.vue'
 import { useToast } from 'vue-toast-notification'
-import 'vue-toast-notification/dist/theme-sugar.css'
+import 'vue-toast-notification/dist/theme-default.css'
 import { ref, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 const router = useRouter()
@@ -52,7 +52,7 @@ const register = async () => {
   const res = await store.registerUser({ email, name, password, username })
   loading.value = false
   if ((res.data.message = 'code-Sent')) {
-    router.push({ name: 'verify-code', params: { email: res.data.email } })
+    router.push({ name: 'verify-code', params: { email: res.data.email }, replace: true })
   }
 }
 </script>
