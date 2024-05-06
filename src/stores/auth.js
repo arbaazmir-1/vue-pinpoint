@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useToast } from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-sugar.css'
-
+const apiUrl = import.meta.env.VITE_API_URL
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null
@@ -18,7 +18,6 @@ export const useAuthStore = defineStore('auth', {
       const $toast = useToast()
 
       try {
-        const apiUrl = import.meta.env.VITE_API_URL
         const res = await axios.post(`${apiUrl}/auth/register`, data)
         console.log(res)
         if ((res.data.message = 'code-Sent')) {
@@ -34,6 +33,34 @@ export const useAuthStore = defineStore('auth', {
         }
         if (e.response.data.message === 'username-taken') {
           let instance = $toast.error('That username is not available!')
+        }
+        return e
+      }
+    },
+    setUser(data) {
+      this.user = data
+    },
+    async login(data) {
+      const $toast = useToast()
+
+      try {
+        const res = await axios.post(`${apiUrl}/auth/login`, data)
+
+        if (res.data.message === 'auth-success') {
+          let instance = $toast.success('Login Success')
+          $cookies.set('token', res.data.token)
+          this.setUser(res.data.user)
+          return res
+        }
+      } catch (e) {
+        if (e.response.data.message === 'no-user') {
+          let instance = $toast.error('No Such User')
+        }
+        if (e.response.data.message === 'not-verified') {
+          let instance = $toast.error('Please Verify Email')
+        }
+        if (e.response.data.message === 'incorrect-password') {
+          let instance = $toast.error('Incorrect Password')
         }
         return e
       }

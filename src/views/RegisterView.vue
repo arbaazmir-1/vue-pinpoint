@@ -8,15 +8,19 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RouterLink, useRouter } from 'vue-router'
 import ModeToggle from '@/components/ModeToggle.vue'
+import { useToast } from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-sugar.css'
 import { ref, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 const router = useRouter()
 let anim = ref()
+const $toast = useToast()
 const email = ref('')
 const name = ref('')
 const password = ref('')
 const username = ref('')
 const repassword = ref('')
+const loading = ref(false)
 const formData = computed(() => ({
   email: email.value,
   name: name.value,
@@ -27,11 +31,26 @@ const formData = computed(() => ({
 const store = useAuthStore()
 const register = async () => {
   const { email, name, password, username, repassword } = formData.value
-
-  if (!email || !name || !password || !username || !repassword) return
-  if (password.length < 8) return
-  if (password !== repassword) return
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!email || !name || !password || !username || !repassword) {
+    let instance = $toast.warning('Fill Up All The Fields')
+    return
+  }
+  if (!emailRegex.test(email)) {
+    let instance = $toast.warning('Provide A Valid Email')
+    return
+  }
+  if (password.length < 8) {
+    let instance = $toast.warning('Password Cannot be less than 8 Character')
+    return
+  }
+  if (password !== repassword) {
+    let instance = $toast.warning('Password Doesnot match')
+    return
+  }
+  loading.value = true
   const res = await store.registerUser({ email, name, password, username })
+  loading.value = false
   if ((res.data.message = 'code-Sent')) {
     router.push({ name: 'verify-code', params: { email: res.data.email } })
   }
@@ -82,7 +101,9 @@ div(class="animate-fade-in w-screen h-hit md:h-screen flex md:flex-row flex-col-
                     Label Reenter Your Password
                     Input(placeholder="Enter Password" type="password" v-model="repassword")
                 //- lottie-animation(:animation-data="catLottie" :auto-play="true" :speed="1" ref="anim" class="h-10")
-                Button(@click="register") Register
+                Button(@click="register" :disabled='loading') 
+                    span(v-if='!loading') Register
+                    span(v-if='loading') Loading
                 div( class="w-full flex flex-col items-end text-xs") 
                     p Have an account?
                     router-link(to="/auth/login" class="hover:text-blue-400 transition-colors duration-150 ease-in-out") Login to Account

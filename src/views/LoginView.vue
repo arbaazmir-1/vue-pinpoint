@@ -8,11 +8,44 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RouterLink } from 'vue-router'
 import ModeToggle from '@/components/ModeToggle.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { useToast } from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-sugar.css'
+const $toast = useToast()
 let anim = ref()
 const email = ref('')
 const password = ref('')
-const logMessage = () => {}
+const store = useAuthStore()
+const loading = ref(false)
+const router = useRouter()
+const formData = computed(() => ({
+  email: email.value,
+  password: password.value
+}))
+const loginFunc = async () => {
+  const { email, password } = formData.value
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(email)) {
+    let instance = $toast.warning('Invalid Email')
+    return
+  }
+  if (password.length < 8) {
+    let instance = $toast.warning('Too Short Password')
+    return
+  }
+
+  const res = await store.login({ email, password })
+  if (res.data && res.data.message === 'auth-success') {
+    router.push({ name: 'home' })
+  }
+  if (res.response && res.response.status === 400) {
+    if (res.response.data.message === 'not-verified') {
+      router.push({ name: 'verify-code', params: { email: email } })
+    }
+  }
+}
 </script>
 
 <template lang="pug">
@@ -50,7 +83,7 @@ div(class="animate-fade-in w-screen h-screen flex md:flex-row flex-col-reverse j
                     Label Enter Your Password
                     Input(placeholder="Enter Password" type="password" v-model="password")
                 //- lottie-animation(:animation-data="catLottie" :auto-play="true" :speed="1" ref="anim" class="h-10")
-                Button() Login
+                Button(@click='loginFunc' :disabled='password.length<8') Login
                 div( class="w-full flex flex-col items-end text-xs") 
                     p Don't have an account?
                     router-link(to="/auth/register" class="hover:text-blue-400 transition-colors duration-150 ease-in-out") Create Account
