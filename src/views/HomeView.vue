@@ -35,7 +35,7 @@ const loading = computed(() => linkStore.getLoading)
 const store = useAuthStore()
 const user = computed(() => store.getProfile)
 const copyurl = () => {
-  const url = 'https://vue-pinpoint.vercel.app/shared/' + user.value.username
+  const url = 'https://pinpoint.abdullahibnshahin.com/shared/' + user.value.username
   navigator.clipboard
     .writeText(url)
     .then(() => {

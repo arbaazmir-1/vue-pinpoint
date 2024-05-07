@@ -40,7 +40,7 @@ const user = computed(() => store.getProfile)
 const linkStore = useLinksStore()
 const editProfileShow = ref(false)
 const showLogout = ref(false)
-const link = 'https://vue-pinpoint.vercel.app/shared/' + user.value.username
+const link = 'https://pinpoint.abdullahibnshahin.com/shared/' + user.value.username
 const logout = async () => {
   store.setUser(null)
   await linkStore.logoutSections()

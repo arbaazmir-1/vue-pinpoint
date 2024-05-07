@@ -25,13 +25,23 @@ div(class="animate-fade-in overflow-y-scroll h-fit md:h-screen md:w-3/5 w-11/12 
         
     div(v-if='sections.length ===0' class="w-full flex items-center justify-center")
         p(class="text-sm text-blue-400") This user has no link
-
+    div(class='w-full mb-2  mt-12 flex space-x-1 items-center justify-center text-sm')
+        p(class='text-sm') Created With ❤️ By
+        a(href="https://www.abdullahibnshahin.com/" target='_blank' class='text-blue-400') Abdullah 
+    div(class='w-full my-1 flex  items-center justify-center text-xs')
+        p(class="text-center") This app uses a free cloud provider for backend and frontend, app might be slow at times
 
 div(class="animate-fade-in h-screen md:w-3/5 w-11/12 lg:w-2/5 flex flex-col mx-auto z-0" v-if='Object.keys(user).length===0 && !loading')
     navbar-comp
     div(class='w-full h-full flex items-center justify-between flex-col overflow-hidden')
         h2(class='text-3xl text-red-400') No Such User
+        div(class='w-full my-5 flex space-x-1 items-center text-sm')
+            p(class='text-sm') Created With ❤️ By
+            a(href="https://www.abdullahibnshahin.com/" target='_blank' class='text-blue-400') Abdullah 
+        div(class='w-full my-5 flex space-x-1 items-center text-xs')
+            p This app uses a free cloud provider for backend and frontend, app might be slow at times
         lottie-animation(:animation-data="catLottie" :auto-play="true" :speed="1" ref="anim" class='h-1/2' )
+    
 
 div(class=" h-screen mt-20 md:w-3/5 w-11/12 lg:w-2/5 flex flex-col items-center  mx-auto z-0" v-if='loading')
     div(class="h-10 w-10 animate-spin rounded-full  border-b-2 border-t-2 border-teal-400 "  )
