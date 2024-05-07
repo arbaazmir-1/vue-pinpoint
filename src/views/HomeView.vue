@@ -6,6 +6,7 @@ div(class="animate-fade-in h-screen md:w-3/5 w-11/12 lg:w-2/5 flex flex-col mx-a
             hr
     link-container-comp(v-if="currentTab==='Home'" )
     profile-container-comp(v-if="currentTab==='Profile'")
+    
         
 
  

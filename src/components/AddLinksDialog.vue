@@ -23,6 +23,7 @@ import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { Switch } from '@/components/ui/switch'
+import { uid } from 'uid'
 import { useToast } from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-sugar.css'
 import { ref, reactive } from 'vue'
@@ -44,8 +45,8 @@ const addLink = (sectionid, name, link) => {
     linkError.value = 'Invalid URL'
     return
   }
-  const uid = 'linkuid' + Math.floor(Math.random() * 100)
-  store.addLink(sectionid, { uid, name, link })
+  const _id = uid(6)
+  store.addLink(sectionid, { _id, name, link })
   emit('closeDialog')
 }
 </script>

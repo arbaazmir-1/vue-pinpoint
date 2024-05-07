@@ -14,7 +14,7 @@ div(class="w-11/12 md:w-1/2 mx-auto dark:bg-gray-800 bg-white shadow-lg  flex fl
         router-link(:to='link') Link
     div(class="flex w-full flex-col space-y-2 my-4")
         Button(@click='showLogout = !showLogout') Logout
-        Button(variant="destructive") Delete Account 
+        
 logout-dialog(v-if='showLogout' @closeDialog="showLogout = !showLogout" @logoutConfirmed='logout')
 </template>
 
@@ -26,13 +26,16 @@ import { Button } from './ui/button'
 import { RouterLink, useRouter } from 'vue-router'
 import LogoutDialog from '@/components/LogoutDialog.vue'
 import { ref } from 'vue'
+import { useLinksStore } from '@/stores/links'
 const router = useRouter()
 const store = useAuthStore()
 const user = store.getProfile
+const linkStore = useLinksStore()
 const showLogout = ref(false)
 const link = 'http://localhost:5172/' + user.username
 const logout = async () => {
   store.setUser(null)
+  await linkStore.logoutSections()
   $cookies.remove('token')
   showLogout.value = !showLogout.value
   router.push({ name: 'login' })

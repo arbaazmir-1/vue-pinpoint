@@ -7,6 +7,7 @@ import VerifyEmail from '@/views/VerifyEmail.vue'
 import PublicLinksView from '@/views/PublicLinksView.vue'
 import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
+import { useLinksStore } from '@/stores/links'
 const apiUrl = import.meta.env.VITE_API_URL
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,7 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   const store = useAuthStore()
+  const linkStore = useLinksStore()
   const user = store.getProfile
   if (to.meta.checkEmail) {
     if (!to.params.email) {
@@ -125,8 +127,15 @@ router.beforeEach((to, from) => {
             })
 
             if (res.data.message === 'auth-success') {
-              router.push({ name: 'home', replace: true })
               store.setUser(res.data.user)
+              const sectionData = await axios.get(`${apiUrl}/links/get-sections`, {
+                headers: headers
+              })
+              if (sectionData.data && sectionData.data.message === 'section-found') {
+                linkStore.setSections(sectionData.data.sections)
+              }
+
+              router.push({ name: 'home', replace: true })
             }
           } catch (e) {
             console.log(e)

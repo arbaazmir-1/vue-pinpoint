@@ -1,56 +1,23 @@
 import { ref, computed, reactive } from 'vue'
 import { defineStore } from 'pinia'
+import axios from 'axios'
+import { uid } from 'uid'
+import { useToast } from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-sugar.css'
+const apiUrl = import.meta.env.VITE_API_URL
 
+const tokenCookie = document.cookie
+  .split(';')
+  .map((cookie) => cookie.trim())
+  .find((cookie) => cookie.startsWith('token='))
+const token = tokenCookie.split('=')[1]
+const $toast = useToast()
+const headers = {
+  Authorization: `Bearer ${token}`
+}
 export const useLinksStore = defineStore('links', {
   state: () => ({
-    sections: reactive([
-      {
-        _id: 'sectionUid1',
-        name: 'Socials',
-        published: true,
-        links: [
-          { _id: 'linkUid1', name: 'Facebook', link: 'https://facebook.com', clicks: 212 },
-          { _id: 'linkUid2', name: 'Twitter', link: 'https://twitter.com', clicks: 150 },
-          { _id: 'linkUid3', name: 'Instagram', link: 'https://instagram.com', clicks: 180 },
-          { _id: 'linkUid4', name: 'LinkedIn', link: 'https://linkedin.com', clicks: 120 },
-          { _id: 'linkUid5', name: 'Pinterest', link: 'https://pinterest.com', clicks: 90 },
-          { _id: 'linkUid6', name: 'Snapchat', link: 'https://snapchat.com', clicks: 80 }
-        ]
-      },
-      {
-        _id: 'sectionUid2',
-        name: 'News',
-        published: false,
-        links: [
-          { _id: 'linkUid7', name: 'CNN', link: 'https://cnn.com', clicks: 300 },
-          { _id: 'linkUid8', name: 'BBC', link: 'https://bbc.com', clicks: 250 },
-          { _id: 'linkUid9', name: 'The Guardian', link: 'https://theguardian.com', clicks: 200 },
-          { _id: 'linkUid10', name: 'New York Times', link: 'https://nytimes.com', clicks: 180 }
-        ]
-      },
-      {
-        _id: 'sectionUid3',
-        name: 'Shopping',
-        published: true,
-        links: [
-          { _id: 'linkUid11', name: 'Amazon', link: 'https://amazon.com', clicks: 500 },
-          { _id: 'linkUid12', name: 'eBay', link: 'https://ebay.com', clicks: 400 },
-          { _id: 'linkUid13', name: 'Walmart', link: 'https://walmart.com', clicks: 300 },
-          { _id: 'linkUid14', name: 'Target', link: 'https://target.com', clicks: 250 }
-        ]
-      },
-      {
-        _id: 'sectionUid4',
-        name: 'Technology',
-        published: true,
-        links: [
-          { _id: 'linkUid15', name: 'TechCrunch', link: 'https://techcrunch.com', clicks: 400 },
-          { _id: 'linkUid16', name: 'The Verge', link: 'https://theverge.com', clicks: 350 },
-          { _id: 'linkUid17', name: 'Wired', link: 'https://wired.com', clicks: 300 },
-          { _id: 'linkUid18', name: 'Ars Technica', link: 'https://arstechnica.com', clicks: 280 }
-        ]
-      }
-    ])
+    sections: reactive([])
   }),
   getters: {
     getSections(state) {
@@ -58,30 +25,75 @@ export const useLinksStore = defineStore('links', {
     }
   },
   actions: {
-    addNewSection(newSection) {
-      const _id = 'uid' + Math.floor(2 + Math.random() * 1000)
-
+    async addNewSection(newSection) {
+      const _id = uid(6)
+      if (!newSection.name) {
+        let instance = $toast.warning('Empty')
+        return
+      }
       const section = {
         name: newSection.name,
         published: newSection.publish,
         links: [],
         _id
       }
-      this.sections.push(section)
+      const res = await axios.post(
+        `${apiUrl}/links/create`,
+        {
+          name: section.name.value,
+          _id: _id,
+          published: section.published.value
+        },
+        {
+          headers: headers
+        }
+      )
+      if (res.data && res.data.message === 'section-created') {
+        this.sections.push(section)
+      }
     },
-    editSection(newData) {
+    async editSection(newData) {
       console.log(newData)
       const section = this.sections.find((sec) => sec._id === newData._id)
       if (section) {
-        section.name = newData.name
-        section.published = newData.published
+        if (section.name === newData.name && section.published === newData.published) {
+          return
+        }
+        const res = await axios.put(
+          `${apiUrl}/links/edit-section`,
+          {
+            name: newData.name,
+            _id: newData._id,
+            published: newData.published
+          },
+          {
+            headers: headers
+          }
+        )
+        if (res.data && res.data.message === 'section-edited') {
+          section.name = newData.name
+          section.published = newData.published
+          let instance = $toast.success('Edited')
+        } else {
+          let instance = $toast.error('Something went wrong')
+        }
       }
     },
-    deleteSection(id) {
+    async deleteSection(id) {
       console.log(id)
       const index = this.sections.findIndex((sec) => sec._id === id)
       if (index !== -1) {
-        this.sections.splice(index, 1)
+        const res = await axios.delete(
+          `${apiUrl}/links/delete-section/${id}`,
+
+          {
+            headers: headers
+          }
+        )
+        if (res.data && res.data.message === 'section-deleted') {
+          this.sections.splice(index, 1)
+          let instance = $toast.success('Section Deleted')
+        }
       }
     },
     deleteLink(linkID, sectionID) {
@@ -106,6 +118,22 @@ export const useLinksStore = defineStore('links', {
       const section = this.sections.find((sec) => sec._id === sectionID)
       if (section) {
         section.links.push(data)
+      }
+    },
+    setSections(data) {
+      this.sections.push(...data)
+    },
+    logoutSections() {
+      this.sections.splice(0)
+    },
+    async fetchSections() {
+      if (token) {
+        const sectionData = await axios.get(`${apiUrl}/links/get-sections`, {
+          headers: headers
+        })
+        if (sectionData.data && sectionData.data.message === 'section-found') {
+          this.setSections(sectionData.data.sections)
+        }
       }
     }
   }

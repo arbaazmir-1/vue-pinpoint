@@ -13,11 +13,13 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-default.css'
+import { useLinksStore } from '@/stores/links'
 const $toast = useToast()
 let anim = ref()
 const email = ref('')
 const password = ref('')
 const store = useAuthStore()
+const linkStore = useLinksStore()
 const loading = ref(false)
 const router = useRouter()
 const formData = computed(() => ({
@@ -38,6 +40,7 @@ const loginFunc = async () => {
 
   const res = await store.login({ email, password })
   if (res.data && res.data.message === 'auth-success') {
+    await linkStore.fetchSections()
     router.push({ name: 'home', replace: true })
   }
   if (res.response && res.response.status === 400) {
