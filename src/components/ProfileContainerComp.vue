@@ -13,6 +13,11 @@ div(class="w-11/12 md:w-1/2 mx-auto dark:bg-gray-800 bg-white shadow-lg  flex fl
     
     div(class="flex w-full flex-col space-y-2 my-4")
         Button(@click='showLogout = !showLogout') Logout
+    div(class='w-full my-5 flex space-x-1 items-center text-sm')
+        p(class='text-sm') Created With ❤️ By
+        a(href="https://www.abdullahibnshahin.com/" target='_blank' class='text-blue-400') Abdullah 
+    div(class='w-full my-5 flex space-x-1 items-center text-xs')
+        p This app uses a free cloud provider for backend and frontend, app might be slow at times
         
 logout-dialog(v-if='showLogout' @closeDialog="showLogout = !showLogout" @logoutConfirmed='logout')
 edit-profile-dialog(v-if='editProfileShow' @closeDialog='editProfileShow = !editProfileShow')
