@@ -8,6 +8,7 @@ import PublicLinksView from '@/views/PublicLinksView.vue'
 import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 import { useLinksStore } from '@/stores/links'
+import { usePublicStore } from '@/stores/public'
 const apiUrl = import.meta.env.VITE_API_URL
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,7 +22,8 @@ const router = createRouter({
     {
       path: '/:username',
       name: 'publicview',
-      component: PublicLinksView
+      component: PublicLinksView,
+      meta: { publicView: true }
     },
     {
       path: '/auth/login',
@@ -47,6 +49,7 @@ router.beforeEach((to, from) => {
   const store = useAuthStore()
   const linkStore = useLinksStore()
   const user = store.getProfile
+  const publicStore = usePublicStore()
   if (to.meta.checkEmail) {
     if (!to.params.email) {
       router.push({ name: 'register' })
@@ -147,6 +150,9 @@ router.beforeEach((to, from) => {
         router.push({ name: 'login', replace: true })
       }
     }
+  }
+  if (to.meta.publicView) {
+    publicStore.getData(to.params.username)
   }
 })
 

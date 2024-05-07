@@ -4,6 +4,19 @@ import axios from 'axios'
 import { useToast } from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-sugar.css'
 const apiUrl = import.meta.env.VITE_API_URL
+let tokenCookie = document.cookie
+let token
+if (tokenCookie) {
+  tokenCookie
+    .split(';')
+    .map((cookie) => cookie.trim())
+    .find((cookie) => cookie.startsWith('token='))
+  token = tokenCookie.split('=')[1]
+}
+const $toast = useToast()
+const headers = {
+  Authorization: `Bearer ${token}`
+}
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null
@@ -63,6 +76,32 @@ export const useAuthStore = defineStore('auth', {
           let instance = $toast.error('Incorrect Password')
         }
         return e
+      }
+    },
+    async updateUser(data) {
+      if (token) {
+        try {
+          const res = await axios.put(`${apiUrl}/auth/updateUser`, data, {
+            headers: headers
+          })
+
+          if (res.data && res.data.message === 'user-updated') {
+            let instance = $toast.success('User update')
+
+            this.user = res.data.user
+
+            return res
+          }
+        } catch (e) {
+          console.log(e)
+          if (e.response.data.message === 'user-not-found') {
+            let instance = $toast.error('Sorry You do not exist')
+          }
+          if (e.response.data.message === 'username-taken') {
+            let instance = $toast.error('That username is not available!')
+          }
+          return e
+        }
       }
     }
   }

@@ -6,11 +6,15 @@ import { useToast } from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-sugar.css'
 const apiUrl = import.meta.env.VITE_API_URL
 
-const tokenCookie = document.cookie
-  .split(';')
-  .map((cookie) => cookie.trim())
-  .find((cookie) => cookie.startsWith('token='))
-const token = tokenCookie.split('=')[1]
+let tokenCookie = document.cookie
+let token
+if (tokenCookie) {
+  tokenCookie
+    .split(';')
+    .map((cookie) => cookie.trim())
+    .find((cookie) => cookie.startsWith('token='))
+  token = tokenCookie.split('=')[1]
+}
 const $toast = useToast()
 const headers = {
   Authorization: `Bearer ${token}`
@@ -96,28 +100,60 @@ export const useLinksStore = defineStore('links', {
         }
       }
     },
-    deleteLink(linkID, sectionID) {
+    async deleteLink(linkID, sectionID) {
       const section = this.sections.find((sec) => sec._id === sectionID)
       if (section) {
         const index = section.links.findIndex((link) => link._id === linkID)
         if (index !== -1) {
-          section.links.splice(index, 1)
+          const res = await axios.delete(`${apiUrl}/links/delete-link/${sectionID}/${linkID}`, {
+            headers: headers
+          })
+          if (res.data && res.data.message === 'link-deleted') {
+            section.links.splice(index, 1)
+            let instance = $toast.success('Link Deleted')
+          }
         }
       }
     },
-    updateLink(linkData, sectionID) {
+    async updateLink(linkData, sectionID) {
       const section = this.sections.find((sec) => sec._id === sectionID)
       if (section) {
         const link = section.links.find((lnk) => lnk._id === linkData._id)
         if (link) {
-          Object.assign(link, linkData)
+          const res = await axios.put(
+            `${apiUrl}/links/edit-link`,
+            {
+              sectionID,
+              ...linkData
+            },
+            {
+              headers: headers
+            }
+          )
+          if (res.data && res.data.message === 'link-edited') {
+            Object.assign(link, linkData)
+            let instance = $toast.success('Link Edited')
+          }
         }
       }
     },
-    addLink(sectionID, data) {
+    async addLink(sectionID, data) {
       const section = this.sections.find((sec) => sec._id === sectionID)
       if (section) {
-        section.links.push(data)
+        const res = await axios.post(
+          `${apiUrl}/links/create-link`,
+          {
+            sectionID,
+            ...data
+          },
+          {
+            headers: headers
+          }
+        )
+        if (res.data && res.data.message === 'link-added') {
+          section.links.push(data)
+          let instance = $toast.success('Link Added')
+        }
       }
     },
     setSections(data) {
