@@ -20,7 +20,7 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/:username',
+      path: '/shared/:username',
       name: 'publicview',
       component: PublicLinksView,
       meta: { publicView: true }

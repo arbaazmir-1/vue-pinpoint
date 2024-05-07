@@ -21,7 +21,8 @@ const headers = {
 }
 export const useLinksStore = defineStore('links', {
   state: () => ({
-    sections: reactive([])
+    sections: reactive([]),
+    loading: ref(false)
   }),
   getters: {
     getSections(state) {
