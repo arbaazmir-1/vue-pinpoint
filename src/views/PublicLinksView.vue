@@ -41,8 +41,10 @@ div(class="animate-fade-in h-screen md:w-3/5 w-11/12 lg:w-2/5 flex flex-col mx-a
         lottie-animation(:animation-data="catLottie" :auto-play="true" :speed="1" ref="anim" class='h-1/2' )
     
 
-div(class=" h-screen mt-20 md:w-3/5 w-11/12 lg:w-2/5 flex flex-col items-center  mx-auto z-0" v-if='loading')
+div(class=" h-screen mt-20 md:w-3/5 w-11/12 lg:w-2/5 flex flex-col items-center dark:bg-gray-900 bg-white  mx-auto z-0" v-if='loading')
     div(class="h-10 w-10 animate-spin rounded-full  border-b-2 border-t-2 border-teal-400 "  )
+    div(class="w-full my-10 mx-auto dark:text-gray-300"  v-if='loading'  )
+        p Please have patience, this site is hosted in free server aka slow response
 
 
         
