@@ -7,7 +7,7 @@ div(class="animate-fade-in h-screen md:w-3/5 w-11/12 lg:w-2/5 flex flex-col mx-a
     link-container-comp(v-if="currentTab==='Home' && !loading " )
     profile-container-comp(v-if="currentTab==='Profile' && !loading ")
     div(class="h-5 w-5 animate-spin rounded-full  border-b-2 border-t-2 border-teal-400 "  v-if='loading'  )
-    div(class="bottom-10 absolute right-10 z-10")
+    div(class="bottom-10 absolute left-10 z-10")
         Button(class="rounded-full" @click='copyurl') Share Url
 
     
