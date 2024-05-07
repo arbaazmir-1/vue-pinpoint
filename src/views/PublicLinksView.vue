@@ -32,12 +32,13 @@ div(class="animate-fade-in overflow-y-scroll h-fit md:h-screen md:w-3/5 w-11/12 
 div(class="animate-fade-in h-screen md:w-3/5 w-11/12 lg:w-2/5 flex flex-col mx-auto z-0" v-if='Object.keys(user).length===0 && !loading')
     navbar-comp
     div(class='w-full h-full flex items-center justify-between flex-col overflow-hidden')
-        h2(class='text-3xl text-red-400') No Such User
-        div(class='w-full my-5 flex space-x-1 items-center text-sm')
-            p(class='text-sm') Created With ❤️ By
-            a(href="https://www.abdullahibnshahin.com/" target='_blank' class='text-blue-400') Abdullah 
-        div(class='w-full my-5 flex space-x-1 items-center text-xs')
-            p This app uses a free cloud provider for backend and frontend, app might be slow at times
+        div(class='flex flex-col items-center ') 
+            h2(class="text-6xl homemade-apple-regular text-red-400") 404
+            p(class="abeezee-regular text-xs mb-10") No User with that username!
+            p(class="abeezee-regular ") Looks like Your Are Lost
+            | Thats Okay, We All get Lost Sometimes
+            router-link(to='/' class="bg-white dark:bg-gray-800 p-2 rounded-sm my-4") Go Home
+          
         lottie-animation(:animation-data="catLottie" :auto-play="true" :speed="1" ref="anim" class='h-1/2' )
     
 
@@ -50,7 +51,6 @@ div(class=" h-screen mt-20 md:w-3/5 w-11/12 lg:w-2/5 flex flex-col items-center 
         
 </template>
 <script setup>
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { RouterLink, useRoute } from 'vue-router'
 import { usePublicStore } from '@/stores/public'
 import { LottieAnimation } from 'lottie-web-vue'

@@ -44,7 +44,9 @@ const router = createRouter({
     { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
   ]
 })
-
+function deleteCookie(name) {
+  document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+}
 router.beforeEach((to, from) => {
   const store = useAuthStore()
   const linkStore = useLinksStore()
@@ -101,7 +103,9 @@ router.beforeEach((to, from) => {
               store.setUser(res.data.user)
             }
           } catch (e) {
-            console.log(e)
+            if (e.response.data === 'Unauthorized') {
+              deleteCookie('token')
+            }
           }
         }
 
@@ -143,7 +147,10 @@ router.beforeEach((to, from) => {
               router.push({ name: 'home', replace: true })
             }
           } catch (e) {
-            console.log(e)
+            if (e.response.data === 'Unauthorized') {
+              deleteCookie('token')
+              router.push({ name: 'login', replace: true })
+            }
           }
         }
 
