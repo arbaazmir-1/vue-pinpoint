@@ -3,6 +3,9 @@ div(class="w-11/12 md:w-1/2 mx-auto dark:bg-gray-800 bg-white shadow-lg  flex fl
     div(class="flex items-start justify-between")
         div(class="flex flex-col space-y-4")
             
+            img(:src="avatar", alt="random-image" class="rounded-full w-12 h-12")
+               
+            
             div(class="flex flex-col space-y-2") 
                 h2 {{user.name}}
                 p(class="text-xs") @{{ user.username }}
@@ -32,6 +35,8 @@ import { Button } from './ui/button'
 import { RouterLink, useRouter } from 'vue-router'
 import LogoutDialog from '@/components/LogoutDialog.vue'
 import EditProfileDialog from './EditProfileDialog.vue'
+import { createAvatar } from '@dicebear/core'
+import { shapes, botttsNeutral } from '@dicebear/collection'
 import { ref, computed } from 'vue'
 import { useLinksStore } from '@/stores/links'
 const router = useRouter()
@@ -48,6 +53,10 @@ const logout = async () => {
   showLogout.value = !showLogout.value
   router.push({ name: 'login' })
 }
+const avatar = createAvatar(botttsNeutral, {
+  size: 128,
+  seed: user.value.name
+}).toDataUriSync()
 </script>
 
 <style lang="sass" scoped></style>

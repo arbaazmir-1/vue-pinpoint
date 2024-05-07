@@ -1,5 +1,5 @@
 <template lang="pug">
-div(class="z-10 w-screen h-screen bg-[#f9f9f990] flex items-center justify-center fixed inset-0") 
+div(class="z-10 w-screen h-screen dark:bg-[#00000070] bg-[#f9f9f990] flex items-center justify-center fixed inset-0") 
     div(class="animate-fade-in z-20 md:w-3/5 w-11/12 lg:w-2/5 xl:w-1/5 h-fit dark:bg-gray-800 bg-white shadow-lg flex-col rounded-md p-5 space-y-3")
         div(class="header flex items-center justify-between ")
             h4 Are Your Sure Your Want to Logout?

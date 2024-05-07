@@ -3,9 +3,7 @@ div(class="animate-fade-in overflow-y-scroll h-fit md:h-screen md:w-3/5 w-11/12 
     navbar-comp
     div(class="flex items-start justify-between  p-4 w-full" )
         div(class="flex items-start space-x-4")
-            avatar(class="w-14 h-14")
-                avatar-image(:src="user.profilePic", alt="@radix-vue")
-                avatar-fallback {{user.name}}
+            img(:src="avatar", alt="random-image" class="rounded-full w-12 h-12")
             div(class="flex flex-col space-y-1") 
                 h2 {{user.name}}
                 p(class="text-sm") {{ user.bio }}
@@ -57,6 +55,8 @@ import { LottieAnimation } from 'lottie-web-vue'
 import catLottie from '../assets/catLottieB.json'
 import ModeToggle from '@/components/ModeToggle.vue'
 import NavbarComp from '@/components/NavbarComp.vue'
+import { createAvatar } from '@dicebear/core'
+import { shapes, botttsNeutral } from '@dicebear/collection'
 import { computed, ref } from 'vue'
 const route = useRoute()
 let anim = ref()
@@ -65,6 +65,10 @@ const store = usePublicStore()
 const loading = computed(() => store.getLoading)
 const sections = computed(() => store.getSections)
 const user = computed(() => store.getUser)
+const avatar = createAvatar(botttsNeutral, {
+  size: 128,
+  seed: user.value.name
+}).toDataUriSync()
 </script>
 
 <style lang="sass" scoped></style>
