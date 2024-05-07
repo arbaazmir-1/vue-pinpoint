@@ -166,14 +166,30 @@ export const useLinksStore = defineStore('links', {
     logoutSections() {
       this.sections.splice(0)
     },
-    async fetchSections() {
+    async fetchSections(sentFromCall=null) {
       if (token) {
+       
         const sectionData = await axios.get(`${apiUrl}/links/get-sections`, {
           headers: headers
         })
+        this.setLoading(false)
         if (sectionData.data && sectionData.data.message === 'section-found') {
           this.setSections(sectionData.data.sections)
         }
+        this.setLoading(false)
+      }
+      if (sentFromCall) {
+       
+        const sectionData = await axios.get(`${apiUrl}/links/get-sections`, {
+          headers: {
+            Authorization: `Bearer ${sentFromCall}`
+          }
+        })
+        this.setLoading(false)
+        if (sectionData.data && sectionData.data.message === 'section-found') {
+          this.setSections(sectionData.data.sections)
+        }
+        this.setLoading(false)
       }
     },
     setLoading(value) {

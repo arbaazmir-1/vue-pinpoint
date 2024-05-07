@@ -41,7 +41,7 @@ const loginFunc = async () => {
   const res = await store.login({ email, password })
   loading.value = false
   if (res.data && res.data.message === 'auth-success') {
-    await linkStore.fetchSections()
+    await linkStore.fetchSections(res.data.token)
     router.push({ name: 'home', replace: true })
   }
   if (res.response && res.response.status === 400) {
