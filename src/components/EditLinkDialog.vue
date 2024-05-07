@@ -13,9 +13,13 @@ div(class="z-10 w-screen h-screen bg-[#f9f9f990] flex items-center justify-cente
                 p(class="text-red-400 text-xs" v-if='errorInput !== null') {{errorInput }}
                 Input(placeholder="Enter Link Address" :class="[errorInput? 'border-red-500': '']" v-model="localData.link" @keyup.enter="updateLink(localData,sectionIDLocal)")
             div(class="flex w-full justify-end space-x-2")
-                Button( @click="emit('closeDialog')") Cancel
-                Button( @click="deleteLink(localData,sectionID)" variant="destructive") Delete
-                Button(class="bg-green-400" @click='updateLink(localData,sectionIDLocal)') Save
+                Button( @click="emit('closeDialog')" :disabled='loading || loadingSave') Cancel
+                Button( @click="deleteLink(localData,sectionID)" variant="destructive" :disabled='loading || loadingSave')
+                    div(class="h-5 w-5 animate-spin rounded-full  border-b-2 border-t-2 border-white "  v-if='loading'  )
+                    span(v-if='!loading') Delete
+                Button(class="bg-green-400" @click='updateLink(localData,sectionIDLocal)' :disabled='loading || loadingSave') 
+                    div(class="h-5 w-5 animate-spin rounded-full  border-b-2 border-t-2 border-white "  v-if='loadingSave'  )
+                    span(v-if='!loadingSave') Save
 </template>
 
 <script setup>
@@ -35,12 +39,17 @@ const sectionIDLocal = reactive(props.sectionID)
 const store = useLinksStore()
 let urlPattern = /\b(?:https?|ftp):\/\/[-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[-A-Za-z0-9+&@#\/%=~_|]/
 const errorInput = ref(null)
-const deleteLink = (localData, sectionIDLocal) => {
+const loading = ref(false)
+const loadingSave = ref(false)
+const deleteLink = async (localData, sectionIDLocal) => {
   if (!localData || !sectionIDLocal) return
-  store.deleteLink(localData._id, sectionIDLocal)
+  loading.value = true
+  await store.deleteLink(localData._id, sectionIDLocal)
+  loading.value = true
   emit('closeDialog')
 }
-const updateLink = (localData, sectionIDLocal) => {
+
+const updateLink = async (localData, sectionIDLocal) => {
   if (!localData.name || !localData.link || !sectionIDLocal) {
     let instance = $toast.error('Fill All Fields')
     return
@@ -49,8 +58,9 @@ const updateLink = (localData, sectionIDLocal) => {
     errorInput.value = 'Invalid URL'
     return
   }
-  console.log(sectionIDLocal)
-  store.updateLink(localData, sectionIDLocal)
+  loadingSave.value = true
+  await store.updateLink(localData, sectionIDLocal)
+  loadingSave.value = false
   emit('closeDialog')
 }
 </script>

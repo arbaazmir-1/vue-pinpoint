@@ -13,8 +13,10 @@ div(class="z-10 w-screen h-screen bg-[#f9f9f990] flex items-center justify-cente
                 p(class="text-red-400 text-xs" v-if='linkError !== null') Please Provide a Valid Link
                 Input(placeholder="Enter Link Address" v-model="link" :class="[linkError? 'border-red-500': '']" )
             div(class="flex w-full justify-end space-x-2")
-                Button( @click="emit('closeDialog')") Cancel
-                Button(class="bg-green-400" @click='addLink(sectionID,name,link)') Save
+                Button( @click="emit('closeDialog')" :disabled='loading') Cancel
+                Button(class="bg-green-400" @click='addLink(sectionID,name,link)' :disabled='loading') 
+                    div(class="h-5 w-5 animate-spin rounded-full  border-b-2 border-t-2 border-white "  v-if='loading'  )
+                    span(v-if='!loading') Add
 </template>
 
 <script setup>
@@ -30,12 +32,13 @@ import { ref, reactive } from 'vue'
 const store = useLinksStore()
 const props = defineProps(['sectionID'])
 const emit = defineEmits(['closeDialog'])
+const loading = ref(false)
 const name = ref('')
 const link = ref('')
 const $toast = useToast()
 let urlPattern = /\b(?:https?|ftp):\/\/[-A-Za-z0-9+&@#\/%?=~_|!:,.;]*[-A-Za-z0-9+&@#\/%=~_|]/
 const linkError = ref(null)
-const addLink = (sectionid, name, link) => {
+const addLink = async (sectionid, name, link) => {
   if (!name || !link || !sectionid) {
     console.log(name, link, sectionid)
     let instance = $toast.error('Please Fill all the value')
@@ -46,7 +49,9 @@ const addLink = (sectionid, name, link) => {
     return
   }
   const _id = uid(6)
-  store.addLink(sectionid, { _id, name, link })
+  loading.value = true
+  await store.addLink(sectionid, { _id, name, link })
+  loading.value = true
   emit('closeDialog')
 }
 </script>

@@ -130,6 +130,7 @@ router.beforeEach((to, from) => {
             })
 
             if (res.data.message === 'auth-success') {
+              linkStore.setLoading(true)
               store.setUser(res.data.user)
               const sectionData = await axios.get(`${apiUrl}/links/get-sections`, {
                 headers: headers
@@ -137,6 +138,7 @@ router.beforeEach((to, from) => {
               if (sectionData.data && sectionData.data.message === 'section-found') {
                 linkStore.setSections(sectionData.data.sections)
               }
+              linkStore.setLoading(false)
 
               router.push({ name: 'home', replace: true })
             }

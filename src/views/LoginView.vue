@@ -37,8 +37,9 @@ const loginFunc = async () => {
     let instance = $toast.warning('Too Short Password')
     return
   }
-
+  loading.value = true
   const res = await store.login({ email, password })
+  loading.value = false
   if (res.data && res.data.message === 'auth-success') {
     await linkStore.fetchSections()
     router.push({ name: 'home', replace: true })
@@ -86,7 +87,9 @@ div(class="animate-fade-in w-screen h-screen flex md:flex-row flex-col-reverse j
                     Label Enter Your Password
                     Input(placeholder="Enter Password" type="password" v-model="password")
                 //- lottie-animation(:animation-data="catLottie" :auto-play="true" :speed="1" ref="anim" class="h-10")
-                Button(@click='loginFunc' :disabled='password.length<8') Login
+                Button(@click='loginFunc' :disabled='password.length<8 || loading') 
+                    div(class="h-5 w-5 animate-spin rounded-full  border-b-2 border-t-2 border-white "  v-if='loading'  )
+                    span(v-if='!loading') Login
                 div( class="w-full flex flex-col items-end text-xs") 
                     p Don't have an account?
                     router-link(to="/auth/register" class="hover:text-blue-400 transition-colors duration-150 ease-in-out") Create Account

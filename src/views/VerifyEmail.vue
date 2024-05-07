@@ -86,7 +86,7 @@ div(class="animate-fade-in w-screen h-screen flex md:flex-row flex-col-reverse j
                 //- lottie-animation(:animation-data="catLottie" :auto-play="true" :speed="1" ref="anim" class="h-10")
                 Button(@click="handleComplete" :disabled='loading') 
                     span(v-if='!loading') Verify
-                    span(v-if='loading') Loading
+                    div(class="h-5 w-5 animate-spin rounded-full  border-b-2 border-t-2 border-white "  v-if='loading'  )
                 div( class="w-full text-center text-xs") 
                     p Check your email for code
                     

@@ -12,8 +12,10 @@ div(class="z-10 w-screen h-screen bg-[#f9f9f990] flex items-center justify-cente
                 p(class="text-sm")  Published
                 input(type="checkbox", name="published" v-model="publish")
             div(class="flex w-full justify-end space-x-2")
-                Button( @click="emit('closeDialog')") Cancel
-                Button(class="bg-green-400" @click='save' ) Save
+                Button( @click="emit('closeDialog')" :disabled='loading') Cancel
+                Button(class="bg-green-400" @click='save' :disabled='loading') 
+                    div(class="h-5 w-5 animate-spin rounded-full  border-b-2 border-t-2 border-white "  v-if='loading'  )
+                    span(v-if='!loading') Add
 </template>
 
 <script setup>
@@ -29,12 +31,15 @@ const name = ref('')
 const publish = ref(false)
 const store = useLinksStore()
 const error = ref(null)
-const save = () => {
+const loading = ref(false)
+const save = async () => {
   if (name.value.length === 0) {
     error.value = 'no-name'
     return
   }
-  store.addNewSection({ name, publish })
+  loading.value = true
+  await store.addNewSection({ name, publish })
+  loading.value = false
   emit('closeDialog')
 }
 </script>

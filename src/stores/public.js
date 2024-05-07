@@ -9,7 +9,8 @@ const apiUrl = import.meta.env.VITE_API_URL_PUBLIC
 export const usePublicStore = defineStore('public', {
   state: () => ({
     sections: reactive([]),
-    user: reactive({})
+    user: reactive({}),
+    loading: ref(true)
   }),
   getters: {
     getSections(state) {
@@ -17,6 +18,9 @@ export const usePublicStore = defineStore('public', {
     },
     getUser(state) {
       return state.user
+    },
+    getLoading(state) {
+      return state.loading
     }
   },
   actions: {
@@ -30,9 +34,15 @@ export const usePublicStore = defineStore('public', {
       try {
         const res = await axios.get(`${apiUrl}/${username}`)
         if (res.data && res.data.message === 'success') {
+          this.setLoading(false)
           this.setUser(res.data.user), this.setSections(res.data.links)
         }
-      } catch (e) {}
+      } catch (e) {
+        this.setLoading(false)
+      }
+    },
+    setLoading(data) {
+      this.loading = data
     }
   }
 })

@@ -12,8 +12,10 @@ div(class="z-10 w-screen h-screen bg-[#f9f9f990] flex items-center justify-cente
                 p(class="text-sm")  Published
                 input(type="checkbox" v-model="localData.published")
             div(class="flex w-full justify-end space-x-2")
-                Button(@click="changeDialog") Cancel
-                Button(class="bg-green-400" @click='save') Save
+                Button(@click="changeDialog" :disabled='loading') Cancel
+                Button(class="bg-green-400" @click='save' :disabled='loading') 
+                    div(class="h-5 w-5 animate-spin rounded-full  border-b-2 border-t-2 border-white "  v-if='loading'  )
+                    span(v-if='!loading') Save
 </template>
 
 <script setup>
@@ -27,13 +29,15 @@ const props = defineProps(['changeDialog', 'data'])
 const emit = defineEmits(['updateName', 'switch'])
 const localData = reactive(JSON.parse(JSON.stringify(props.data)))
 const store = useLinksStore()
-const save = () => {
+const loading = ref(false)
+const save = async () => {
   if (!localData.name.trim()) {
     alert('Name cannot be empty')
     return
   }
-
-  store.editSection(localData)
+  loading.value = true
+  await store.editSection(localData)
+  loading.value = true
   props.changeDialog()
 }
 </script>

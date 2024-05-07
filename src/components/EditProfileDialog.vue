@@ -15,8 +15,10 @@ div(class="z-10 w-screen h-screen bg-[#f9f9f990] flex items-center justify-cente
                 Label  Bio
                 Input(placeholder="Enter New Section Title" v-model='user.bio')
             div(class="flex w-full justify-end space-x-2")
-                Button(@click="emit('closeDialog')") Cancel
-                Button(class="bg-green-400" @click='updateUserFunc(user)') Save
+                Button(@click="emit('closeDialog')" :disabled='loading') Cancel
+                Button(class="bg-green-400" @click='updateUserFunc(user)' :disabled='loading') 
+                    div(class="h-5 w-5 animate-spin rounded-full  border-b-2 border-t-2 border-white "  v-if='loading'  )
+                    span(v-if='!loading') Save
     </template>
 
 <script setup>
@@ -40,7 +42,7 @@ const updateUserFunc = async (user) => {
   }
   loading.value = true
   const res = await authStore.updateUser({ ...user })
-
+  loading.value = false
   if (res.data && res.data.message === 'user-updated') {
     emit('closeDialog')
   }

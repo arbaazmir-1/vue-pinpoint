@@ -8,19 +8,24 @@ div(class="z-10 w-screen h-screen bg-[#f9f9f990] flex items-center justify-cente
         div(class="body-dialog flex flex-col w-full space-y-4")
             
             div(class="flex w-full justify-end space-x-2")
-                Button(@click="emit('closeDialog')") Cancel
-                Button(@click="deleteSection" variant="destructive") Delete
+                Button(@click="emit('closeDialog')" :disabled='loading') Cancel
+                Button(@click="deleteSection" variant="destructive" :disabled='loading')
+                    div(class="h-5 w-5 animate-spin rounded-full  border-b-2 border-t-2 border-white "  v-if='loading'  )
+                    span(v-if='!loading') Delete
 </template>
 
 <script setup>
 import { useLinksStore } from '@/stores/links'
 import { Button } from './ui/button'
+import { ref } from 'vue'
 const props = defineProps(['data'])
 const emit = defineEmits(['closeDialog', 'deleteSection'])
 const store = useLinksStore()
-
-const deleteSection = () => {
-  store.deleteSection(props.data._id)
+const loading = ref(false)
+const deleteSection = async () => {
+  loading.value = true
+  await store.deleteSection(props.data._id)
+  loading.value = true
   emit('closeDialog')
 }
 </script>

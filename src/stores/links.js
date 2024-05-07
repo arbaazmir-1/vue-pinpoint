@@ -22,11 +22,14 @@ const headers = {
 export const useLinksStore = defineStore('links', {
   state: () => ({
     sections: reactive([]),
-    loading: ref(false)
+    loading: ref(true)
   }),
   getters: {
     getSections(state) {
       return state.sections
+    },
+    getLoading(state) {
+      return state.loading
     }
   },
   actions: {
@@ -172,6 +175,9 @@ export const useLinksStore = defineStore('links', {
           this.setSections(sectionData.data.sections)
         }
       }
+    },
+    setLoading(value) {
+      this.loading = value
     }
   }
 })

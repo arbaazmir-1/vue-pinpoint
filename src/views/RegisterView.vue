@@ -103,7 +103,7 @@ div(class="animate-fade-in w-screen h-hit md:h-screen flex md:flex-row flex-col-
                 //- lottie-animation(:animation-data="catLottie" :auto-play="true" :speed="1" ref="anim" class="h-10")
                 Button(@click="register" :disabled='loading') 
                     span(v-if='!loading') Register
-                    span(v-if='loading') Loading
+                    div(class="h-5 w-5 animate-spin rounded-full  border-b-2 border-t-2 border-white "  v-if='loading'  )
                 div( class="w-full flex flex-col items-end text-xs") 
                     p Have an account?
                     router-link(to="/auth/login" class="hover:text-blue-400 transition-colors duration-150 ease-in-out") Login to Account
