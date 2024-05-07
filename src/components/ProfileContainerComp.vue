@@ -8,7 +8,7 @@ div(class="w-11/12 md:w-1/2 mx-auto dark:bg-gray-800 bg-white shadow-lg  flex fl
                 p(class="text-xs") @{{ user.username }}
                 p(class="text-xs") Bio: {{ user.bio }}
                 p(class="text-xs") Page Link : 
-                    router-link(:to='link') Link
+                    a(:href='link' target='_blank') Link
         Button(@click='editProfileShow = !editProfileShow') Edit
     
     div(class="flex w-full flex-col space-y-2 my-4")
@@ -35,7 +35,7 @@ const user = computed(() => store.getProfile)
 const linkStore = useLinksStore()
 const editProfileShow = ref(false)
 const showLogout = ref(false)
-const link = 'http://localhost:5172/' + user.username
+const link = 'https://vue-pinpoint.onrender.com/' + user.username
 const logout = async () => {
   store.setUser(null)
   await linkStore.logoutSections()
