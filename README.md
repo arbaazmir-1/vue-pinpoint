@@ -1,6 +1,6 @@
-# frontend
+# frontend - pinpoint
 
-This template should help get you started developing with Vue 3 in Vite.
+This Project was done to learn vue 3. The backend for this project can be found [here](https://github.com/arbaazmir-1/pinpoint-backend)
 
 ## Recommended IDE Setup
 
