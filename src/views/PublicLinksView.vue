@@ -17,8 +17,8 @@ div(class="animate-fade-in overflow-y-scroll h-fit md:h-screen md:w-3/5 w-11/12 
           
           
         
-        a(:href='link.link' target="_blank"  v-for="link in section.links" class="w-full transition-colors duration-150 flex items-center justify-between ease-linear cursor-pointer select-none dark:bg-gray-800 bg-gray-200 hover:bg-blue-50 p-2 rounded-sm" :key="link.name")
-            p {{link.name}}
+        a(:href='link.link' target="_blank"  v-for="link in section.links" class="w-full transition-colors duration-150 flex md:flex-row  flex-col md:items-center justify-between ease-linear cursor-pointer select-none dark:bg-gray-800 bg-gray-200 hover:bg-blue-50 p-2 rounded-sm" :key="link.name")
+            p(class="text-xs") {{link.name}}:
             p(class="text-xs") URL: {{link.link}}
         p(v-if='section.links.length===0' class="text-sm") No Links In This Section
            
