@@ -53,7 +53,7 @@ div(class=" h-screen mt-20 md:w-3/5 w-11/12 lg:w-2/5 flex flex-col items-center 
 <script setup>
 import { RouterLink, useRoute } from 'vue-router'
 import { usePublicStore } from '@/stores/public'
-import { useAuthStore } from '@/stores/auth'
+
 import { LottieAnimation } from 'lottie-web-vue'
 import catLottie from '../assets/catLottieB.json'
 import ModeToggle from '@/components/ModeToggle.vue'
@@ -68,10 +68,19 @@ const store = usePublicStore()
 const loading = computed(() => store.getLoading)
 const sections = computed(() => store.getSections)
 const user = computed(() => store.getUser)
-const avatar = createAvatar(botttsNeutral, {
-  size: 128,
-  seed: user.value.name
-}).toDataUriSync()
+const avatar = computed(() => {
+  if (user.value && user.value.name) {
+    return createAvatar(botttsNeutral, {
+      size: 128,
+      seed: user.value.name
+    }).toDataUriSync()
+  } else {
+    return createAvatar(botttsNeutral, {
+      size: 128,
+      seed: 'pinpoint'
+    }).toDataUriSync()
+  }
+})
 </script>
 
 <style lang="sass" scoped></style>
