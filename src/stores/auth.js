@@ -32,7 +32,7 @@ export const useAuthStore = defineStore('auth', {
 
       try {
         const res = await axios.post(`${apiUrl}/auth/register`, data)
-        console.log(res)
+        
         if ((res.data.message = 'code-Sent')) {
           let instance = $toast.success('Code Sent')
           const emailFromData = res.data.email
@@ -40,7 +40,7 @@ export const useAuthStore = defineStore('auth', {
           return res
         }
       } catch (e) {
-        console.log(e)
+        
         if (e.response.data.message === 'email-exist') {
           let instance = $toast.error('User With this email already exists')
         }
@@ -93,7 +93,7 @@ export const useAuthStore = defineStore('auth', {
             return res
           }
         } catch (e) {
-          console.log(e)
+          
           if (e.response.data.message === 'user-not-found') {
             let instance = $toast.error('Sorry You do not exist')
           }

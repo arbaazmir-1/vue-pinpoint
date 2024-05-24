@@ -29,7 +29,7 @@ const handleComplete = async () => {
       email: route.params.email
     })
     loading.value = false
-    console.log(res)
+    
     if ((res.data.message = 'email-verified')) {
       let instance = $toast.success('Horray!! Email Verified! Login Now!')
       router.push({ name: 'login', replace: true })
@@ -39,7 +39,7 @@ const handleComplete = async () => {
     if ((e.response.data.message = 'code-wrong')) {
       let instance = $toast.error('Wrong Code Try Again')
     }
-    console.log(e)
+    
   }
 }
 </script>

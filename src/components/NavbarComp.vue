@@ -26,7 +26,6 @@ const $toast = useToast()
 const store = useAuthStore()
 const user = computed(() => store.getProfile)
 const route = useRoute()
-console.log(route.name)
 const copyurl = () => {
   const url = 'https://pinpoint.abdullahibnshahin.com/shared/' + user.value.username
   navigator.clipboard

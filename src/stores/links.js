@@ -61,7 +61,7 @@ export const useLinksStore = defineStore('links', {
       }
     },
     async editSection(newData) {
-      console.log(newData)
+      
       const section = this.sections.find((sec) => sec._id === newData._id)
       if (section) {
         if (section.name === newData.name && section.published === newData.published) {
@@ -88,7 +88,7 @@ export const useLinksStore = defineStore('links', {
       }
     },
     async deleteSection(id) {
-      console.log(id)
+      
       const index = this.sections.findIndex((sec) => sec._id === id)
       if (index !== -1) {
         const res = await axios.delete(

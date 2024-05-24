@@ -72,7 +72,7 @@ router.beforeEach((to, from) => {
           router.push({ name: 'login', replace: true })
         }
       } catch (e) {
-        console.log(e)
+        
       }
     }
     handleComplete()
@@ -86,7 +86,7 @@ router.beforeEach((to, from) => {
 
       if (tokenCookie) {
         const token = tokenCookie.split('=')[1]
-        console.log(token) // This will log the token value
+       
 
         const handleGetUser = async () => {
           try {

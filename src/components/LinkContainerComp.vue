@@ -51,7 +51,6 @@ const toggleDelete = (section) => {
   showDeleteDialog.value = !showDeleteDialog.value
 }
 const toggleAddLinks = (id) => {
-  console.log(id)
   sectionID.value = id
   showAddLinkDialog.value = !showAddLinkDialog.value
 }
